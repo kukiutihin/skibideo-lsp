@@ -23,6 +23,7 @@
 
 Add the following configuration to your `lsp-config` setup:
 
+```lua
 return {
     "neovim/nvim-lspconfig",
     dependencies = { "williamboman/mason-lspconfig.nvim" },
@@ -52,6 +53,7 @@ return {
         }
     end
 }
+```
 
 ## Command-Line Flags for the LSP Server
 
