@@ -1,11 +1,12 @@
 # Skibideo LSP
 
-## Requirements for the `1f` Compiler
+## Requirements for the 1f Compiler
 
-1. **Input via `stdin`:** The compiler must accept the source code for analysis from the standard input stream.
+1. **Input via stdin:** The compiler must accept the source code for analysis from the standard input stream.
 2. **Output errors in JSON:** Upon finding syntax or type errors, the compiler must output an array of JSON objects of a specific format to the standard output stream.
 
 **Example of expected compiler output:**
+```json
 [
     {
         "message": "undefined variable 'skibidi'",
@@ -16,6 +17,7 @@
         "severity": 1 
     }
 ]
+```
 
 *Note: `severity: 1` represents an Error, `2` — Warning, `3` — Information, and `4` — Hint.*
 
