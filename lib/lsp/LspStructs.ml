@@ -20,6 +20,8 @@ module LspStructs = struct
   }
   [@@deriving yojson]
 
+  type position = { line : int; character : int } [@@deriving yojson]
+
   (*
     Text Document
   *)
@@ -38,7 +40,7 @@ module LspStructs = struct
   [@@deriving yojson]
 
   (*
-    Initialize Request
+    Initialize
   *)
 
   type client_info = { name : string; version : string }
@@ -53,8 +55,14 @@ module LspStructs = struct
   type initialize_request = { id : int; params : initialize_request_params }
   [@@deriving yojson { strict = false }]
 
+  type completion_provider = {
+    resolve_provider : bool; [@key "resolveProvider"]
+  }
+  [@@deriving yojson]
+
   type server_capabilities = {
     text_document_sync_kind : int; [@key "textDocumentSync"]
+    completion_provider : completion_provider; [@key "completionProvider"]
   }
   [@@deriving yojson]
 
@@ -79,7 +87,7 @@ module LspStructs = struct
   [@@deriving yojson]
 
   (*
-    didChange Request
+    didChange
   *)
 
   type content_change_event = { text : string } [@@deriving yojson]
@@ -98,7 +106,7 @@ module LspStructs = struct
   [@@deriving yojson]
 
   (*
-    didOpen Request
+    didOpen
   *)
 
   type did_open_params = {
@@ -114,7 +122,7 @@ module LspStructs = struct
   [@@deriving yojson]
 
   (*
-    didSave Request
+    didSave
   *)
 
   type did_save_params = {
@@ -130,7 +138,7 @@ module LspStructs = struct
   [@@deriving yojson]
 
   (*
-   Publish Diagnostics 
+   publish diagnostics 
   *)
 
   type publish_diagnostics_params = {
@@ -143,6 +151,47 @@ module LspStructs = struct
     rpc : string; [@key "jsonrpc"]
     method_ : string; [@key "method"]
     params : publish_diagnostics_params;
+  }
+  [@@deriving yojson]
+
+  (*
+    completion
+  *)
+
+  type completion_context = {
+    trigger_kind : int; [@key "triggerKind"]
+    trigger_char : string option; [@default None] [@key "triggerCharacter"]
+  }
+  [@@deriving yojson]
+
+  type completion_params = {
+    text_document : text_document_identifier; [@key "textDocument"]
+    position : position;
+    context : completion_context;
+  }
+  [@@deriving yojson]
+
+  type completion_request = {
+    rpc : string; [@key "jsonrpc"]
+    id : int;
+    method_ : string; [@key "method"]
+    params : completion_params;
+  }
+  [@@deriving yojson]
+
+  type completion_item = { label : string; kind : int; detail : string }
+  [@@deriving yojson]
+
+  type completion_result = {
+    is_incomplete : bool; [@key "isIncomplete"]
+    items : completion_item list;
+  }
+  [@@deriving yojson]
+
+  type completion_response = {
+    rpc : string; [@key "jsonrpc"]
+    id : int;
+    result : completion_result;
   }
   [@@deriving yojson]
 end

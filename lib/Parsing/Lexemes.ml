@@ -15,6 +15,7 @@ module Lexemes = struct
     | BigIdentifier of string
     | Lambda
     | Type
+    | TypeAlias
     | Eof
     | LCbr
     | RCbr
@@ -27,6 +28,7 @@ module Lexemes = struct
     | Else
     | VBar
     | Semicolon
+    | Colon
     | Of
     | Dot
     | Comma
@@ -37,11 +39,13 @@ module Lexemes = struct
     | Match
     | With
     | When
+    | And
 
   let uchar_to_string u =
     let b = Buffer.create 4 in
     Buffer.add_utf_8_uchar b u;
     Buffer.contents b
+
 
   let to_string = function
     | IntLiteral i -> Format.sprintf "целое число %d" i
@@ -82,6 +86,10 @@ module Lexemes = struct
     | Match -> "сопоставить"
     | With -> "с"
     | When -> "когда"
+    | Colon -> "двоеточие"
+    | And -> "и"
+    | TypeAlias -> "алиас"
+
 
   let write_file (path : string) (content : string) =
     try
@@ -91,10 +99,12 @@ module Lexemes = struct
     with Sys_error x ->
       Result.error @@ Format.sprintf "Failed writing to a file: %s" x
 
+
   let t_with_pos_to_string
       ((token, s, e) : t * Lexing.position * Lexing.position) =
     Format.sprintf "[line: %d, char: %d-%d] %s" s.pos_lnum
       (s.pos_cnum - s.pos_bol) (e.pos_cnum - e.pos_bol) (to_string token)
+
 
   let dump tokens = List.map t_with_pos_to_string tokens |> String.concat "\n"
 

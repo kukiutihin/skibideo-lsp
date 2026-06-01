@@ -1,0 +1,1 @@
+module SemanticTokens = struct end
